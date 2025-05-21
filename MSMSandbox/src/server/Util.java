@@ -28,7 +28,6 @@ import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.extensions.SFSExtension;
 
 public class Util {
-	//static SFSExtension ext; = (SFSExtension) SmartFoxServer.getInstance().getZoneManager().getZoneByName("MySingingMonsters").getExtension();
     
 	static MainExtension ext;
 	
