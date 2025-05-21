@@ -124,9 +124,12 @@ public class MSMClient extends SmartFox {
 				sfs.send(new ExtensionRequest("db_monster", null));
 				sfs.send(new ExtensionRequest("db_structure", null));
 				sfs.send(new ExtensionRequest("db_island_v2", null));
+				sfs.send(new ExtensionRequest("db_island_themes", null));
 				sfs.send(new ExtensionRequest("db_costumes", null));
-				sfs.send(new ExtensionRequest("db_battle", null));
 				sfs.send(new ExtensionRequest("db_store_v2", null));
+				sfs.send(new ExtensionRequest("db_scratch_offs", null));
+				sfs.send(new ExtensionRequest("db_level", null));
+				sfs.send(new ExtensionRequest("gs_cant_breed", null));
 			}
 			
 			if (cmd.equals("game_settings")) {

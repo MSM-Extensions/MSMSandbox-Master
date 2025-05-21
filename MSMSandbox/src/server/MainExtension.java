@@ -10,6 +10,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
@@ -31,6 +34,8 @@ public class MainExtension extends SFSExtension {
     public static String encryptionVector = Settings.get("encryption_vector");
     public static String encryptionSecretKey = Settings.get("encryption_secret_key");
     
+    public static int sessionsSinceStart;
+    
     //public static SFSDBManager dbm;
     
     public static String DBUrl;
@@ -39,6 +44,30 @@ public class MainExtension extends SFSExtension {
     
     public static boolean can_play = false;
     public static String cant_play_reason;
+
+    public void cacheDbs() {
+		can_play = false;
+		cant_play_reason = "Server reloading!";
+        
+        client = new MSMClient("yfjdv5psbwxz", "3774dj5c96tpb8h3tgjt", "anon", "4.8.2", "70ba5d5d-d903-4587-93d6-655c4814844f", true);
+        
+        SFSObject auth = client.auth();
+        
+        this.trace("Cacheing dbs");
+        
+        if (auth.getBool("ok")) {
+        	SFSObject pregameSetup = client.pregameSetup();
+        	if (pregameSetup.getBool("ok")) {
+        		client.connectToServer();
+        	} else {
+        		trace("Pregame Setup failed: "+pregameSetup.getUtfString("message"));
+        	}
+        } else {
+        	trace("Auth failed: "+auth.getUtfString("message"));
+        }
+        
+        can_play = true;
+    }
     
     @Override
     public void init() {
@@ -295,28 +324,8 @@ public class MainExtension extends SFSExtension {
         addRequestHandler("gs_collect_synthesizing_failure", GameStateHandler.class);
 		
 		//JSONObject tokenRequest = new JSONObject(Util.PostRequest("https://auth.bbbgame.net/auth/api/anon_account/?g=27", ""));
-		
-		can_play = false;
-		cant_play_reason = "Server reloading!";
         
-        client = new MSMClient("yfjdv5psbwxz", "3774dj5c96tpb8h3tgjt", "anon", "4.8.2", "70ba5d5d-d903-4587-93d6-655c4814844f", true);
-        
-        SFSObject auth = client.auth();
-        
-        trace("Cacheing dbs");
-        
-        if (auth.getBool("ok")) {
-        	SFSObject pregameSetup = client.pregameSetup();
-        	if (pregameSetup.getBool("ok")) {
-        		client.connectToServer();
-        	} else {
-        		trace("Pregame Setup failed: "+pregameSetup.getUtfString("message"));
-        	}
-        } else {
-        	trace("Auth failed: "+auth.getUtfString("message"));
-        }
-        
-        can_play = true;
+        cacheDbs();
         
         trace("Cacheing complete! MSM Sandbox initialized");
     }

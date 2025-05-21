@@ -168,6 +168,12 @@ public class JoinZoneHandler extends BaseServerEventHandler {
 		msgResponse2.putUtfString("msg", text2);
 		
         send("gs_display_generic_message", msgResponse, user);
+        
+        MainExtension.sessionsSinceStart++;
+        
+        if (MainExtension.sessionsSinceStart % 10 == 0 && MainExtension.sessionsSinceStart != 0) {
+        	//MainExtension.cacheDbs();
+        }
         // send("gs_display_generic_message", msgResponse2, user);
 	}
 

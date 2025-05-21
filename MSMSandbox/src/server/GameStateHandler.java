@@ -281,7 +281,7 @@ public class GameStateHandler extends BaseClientRequestHandler {
 		// player
 		case "gs_quest":
 			response.putSFSArray("result", new SFSArray());
-			response.putInt("event_id", 0);
+			//response.putInt("event_id", 0);
 			
 			send(cmd, response, user);
 			break;
