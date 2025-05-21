@@ -24,6 +24,22 @@ public class Monster extends Entity {
 
 	public Monster(SFSObject data) {
 		super(data);
+		
+		this.beds = data.getInt("beds");
+	    this.monster_class = data.getUtfString("class");
+	    this.genes = data.getUtfString("genes");
+	    this.happiness = (SFSObject) data.getSFSObject("happiness");
+	    this.level = data.getInt("level");
+	    this.levels = (SFSArray) data.getSFSArray("levels");
+	    this.levelup_island = data.getUtfString("levelup_island");
+	    this.monster_id = data.getInt("monster_id");
+	    this.names = (SFSArray) data.getSFSArray("names");
+	    this.portrait_graphic = data.getUtfString("portrait_graphic");
+	    this.select_sound = data.getUtfString("select_sound");
+	    this.spore_graphic = data.getUtfString("spore_graphic");
+	    this.time_availability = data.getInt("time_availability");
+	    this.time_to_fill_sec = data.getInt("time_to_fill_sec");
+	    this.xp = data.getInt("xp");
 	}
 
 }
