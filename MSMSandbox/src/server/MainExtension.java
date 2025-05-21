@@ -23,6 +23,7 @@ import com.smartfoxserver.v2.core.SFSEventType;
 import server.ServerEventHandler.DisconnectHandler;
 import server.ServerEventHandler.JoinZoneHandler;
 import server.ServerEventHandler.LoginHandler;
+import server.Tools.MSMClient;
 import server.Tools.Util;
 
 public class MainExtension extends SFSExtension {
@@ -286,6 +287,8 @@ public class MainExtension extends SFSExtension {
         addRequestHandler("gs_collect_synthesizing_failure", GameStateHandler.class);
         
         trace("MSM Sandbox initialized");
+        
+        MSMClient client = new MSMClient("zhkfwm43wn", "rxts83bj9hn8757cb23d", "anon", "4.5.0", "58ffe1b7-1620-4534-982a-9f71bdb476fe");
     }
 
 }

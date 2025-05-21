@@ -36,9 +36,10 @@ public class MSMClient extends SmartFox {
 		tokenRequestJson.put("access_key", this.access_key);
 		tokenRequestJson.put("platform", "pc");
 		
-		JSONObject tokenRequest = new JSONObject(Util.PostRequest("https://auth.bbbgame.net/auth/api/token", tokenRequestJson.toString()));
+		JSONObject tokenRequest = new JSONObject(Util.PostRequest("https://auth.bbbgame.net/auth/api/token/", tokenRequestJson.toString()));
 		
 		if (!tokenRequest.getBoolean("ok")) {
+			Util.ext.trace(tokenRequest.toString());
 			Util.ext.trace("MSMClient: "+tokenRequest.getString("message"));
 			return;
 		}
@@ -49,7 +50,7 @@ public class MSMClient extends SmartFox {
 		Map<String, String> pregameSetupHeaders = new HashMap<>();
 		pregameSetupHeaders.put("Authorization", this.access_token);
 		
-		JSONObject pregameSetupRequest = new JSONObject(Util.PostRequest("https://msmpc.bbbgame.net/pregame_setup.php", tokenRequestJson.toString(), pregameSetupHeaders));
+		JSONObject pregameSetupRequest = new JSONObject(Util.PostRequest("https://msmpc.bbbgame.net/pregame_setup.php/", tokenRequestJson.toString(), pregameSetupHeaders));
 		
 		if (!pregameSetupRequest.getBoolean("ok")) {
 			Util.ext.trace("MSMClient: "+tokenRequest.getString("message"));
@@ -60,7 +61,7 @@ public class MSMClient extends SmartFox {
 		this.content_url = tokenRequest.getString("contentUrl");
 	}
 	
-	private void Connect() {
+	public void connect() {
         ConfigData config = new ConfigData();
         config.setHost(this.server_ip);
         config.setPort(9933);
