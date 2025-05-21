@@ -35,6 +35,8 @@ public class MainExtension extends SFSExtension {
     
     public static String DBUrl;
     
+    public static MSMClient client;
+    
     @Override
     public void init() {
         Long startTime = Util.getUnixTime();
@@ -295,19 +297,16 @@ public class MainExtension extends SFSExtension {
 		
 		trace(tokenRequest.toString());
         
-        MSMClient client = new MSMClient(tokenRequest.getString("username"), tokenRequest.getString("password"), "anon", "4.8.2", "70ba5d5d-d903-4587-93d6-655c4814844f", true);
+        client = new MSMClient(tokenRequest.getString("username"), tokenRequest.getString("password"), "anon", "4.8.2", "70ba5d5d-d903-4587-93d6-655c4814844f", true);
         
         SFSObject auth = client.auth();
+        
+        trace("Cacheing dbs");
         
         if (auth.getBool("ok")) {
         	SFSObject pregameSetup = client.pregameSetup();
         	if (pregameSetup.getBool("ok")) {
-        		trace("Server Ip: "+pregameSetup.getUtfString("ip"));
-        		
         		client.connectToServer();
-        		
-        		Util.sleep(10000);
-        		trace(client.downloads.getDump());
         	} else {
         		trace("Pregame Setup failed: "+pregameSetup.getUtfString("message"));
         	}
@@ -315,7 +314,7 @@ public class MainExtension extends SFSExtension {
         	trace("Auth failed: "+auth.getUtfString("message"));
         }
         
-        trace("MSM Sandbox initialized");
+        trace("Cacheing complete! MSM Sandbox initialized");
     }
 
 }

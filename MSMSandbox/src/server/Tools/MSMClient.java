@@ -24,9 +24,9 @@ public class MSMClient extends SmartFox {
 	
 	private boolean download_requests;
 	
-	public SFSObject response = new SFSObject();
-	
 	public SFSArray downloads = new SFSArray();
+	
+	public SFSArray game_settings = new SFSArray();
 	
 	SmartFox sfs;
 	
@@ -118,8 +118,27 @@ public class MSMClient extends SmartFox {
 		
 		downloads.addSFSObject(downloaded_request);
 		
-		if (cmd.equals("gs_initialized") && this.download_requests) {
-			sfs.send(new ExtensionRequest("db_breeding", null));
+		if (this.download_requests) {
+			if (cmd.equals("gs_initialized")) {
+				sfs.send(new ExtensionRequest("db_genes", null));
+			}
+			
+			if (cmd.equals("game_settings")) {
+				game_settings.addSFSObject(params);
+			}	
 		}
 	}
+	
+	public SFSObject getParamsByCmd(String searchCmd) {
+	    for (int i = 0; i < downloads.size(); i++) {
+	        SFSObject obj = (SFSObject) downloads.getSFSObject(i);
+	        String cmd = obj.getUtfString("cmd");
+
+	        if (cmd.equals(searchCmd)) {
+	            return (SFSObject) obj.getSFSObject("params");
+	        }
+	    }
+	    return null;
+	}
+
 }

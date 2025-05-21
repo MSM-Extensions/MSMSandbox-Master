@@ -143,13 +143,14 @@ public class JoinZoneHandler extends BaseServerEventHandler {
 		
 		// user game settings
         
-    	for (int i = 1; i < 4; i++) {
-    		trace("Sending game_settings "+i);
-            File file = new File(Settings.ServerRoot + "/json_db/user_game_settings/"+i + ".json");
-            SFSObject resp = Util.getSFSFromJson(file);
-            
-            send("game_settings", resp, user);
-        }
+		SFSArray settings = MainExtension.client.game_settings;
+
+		for (int i = 0; i < Math.min(settings.size(), 4); i++) {
+			SFSObject resp = (SFSObject) settings.getSFSObject(i);
+		    trace("Sending game_settings " + (i + 1) + "\n" + resp.getDump());
+		    
+		    send("game_settings", resp, user);
+		}
     	
 		send("gs_initialized", response, user);
 		
