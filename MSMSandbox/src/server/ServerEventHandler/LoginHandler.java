@@ -43,6 +43,8 @@ public class LoginHandler extends BaseServerEventHandler {
                     session.setProperty("user_game_id", gameIdsJson.get(0));
                     session.setProperty("username", jsonObject.get("username"));
                     session.setProperty("loginType", jsonObject.get("login_type"));
+                    session.setProperty("bbb_id", jsonObject.get("bbb_id"));
+                    session.setProperty("ip", jsonObject.get("ip_address"));
 
                     if (additionalData.containsKey("last_updated")) {
                         session.setProperty("last_updated", additionalData.getLong("last_updated"));

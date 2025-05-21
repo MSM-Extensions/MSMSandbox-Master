@@ -68,6 +68,7 @@ public class JoinZoneHandler extends BaseServerEventHandler {
         String clientSubplatform = session.getProperty("client_subplatform") != null ? (String)session.getProperty("client_subplatform") : "";
         String rawDeviceId = session.getProperty("raw_device_id") != null ? (String)session.getProperty("raw_device_id") : "";
         String clientLang = session.getProperty("client_lang") != null ? (String)session.getProperty("client_lang") : "";
+        String actualIp = session.getProperty("ip_address") != null ? (String)session.getProperty("ip_address") : "";
         String lastUpdateVersion = (String)session.getProperty("last_update_version");
 		
         boolean canPlay = compareVersions(actualClientVersion, Settings.get("min_client_version"));
@@ -77,7 +78,9 @@ public class JoinZoneHandler extends BaseServerEventHandler {
         	return;
         }
         
-        //Long bbbId = (long) 1;
+        int bbbId = (int) session.getProperty("bbb_id");
+        
+        /*
         
         JSONObject requestJson = new JSONObject();
         requestJson.put("user_game_id", userGameId);
@@ -92,8 +95,6 @@ public class JoinZoneHandler extends BaseServerEventHandler {
             send("gs_player_banned", response, user);
             return;
         }
-        
-        int bbbId = userGameIdToBBBIDJson.getInt("bbb_id");
         
         boolean isNew = (boolean) userGameIdToBBBIDJson.getBoolean("is_new");
         
@@ -112,8 +113,9 @@ public class JoinZoneHandler extends BaseServerEventHandler {
         	player = new Player(bbbId, "New Player");
         }
         
-        //Random rand2 = new Random();
-        //bbbId = (long) (rand.nextInt(100000) + 1);
+        */
+        
+        Player player = new Player(bbbId, "New Player");
         
         user.setProperty("player_object", player);
         user.setProperty("bbb_id", bbbId);
@@ -123,7 +125,7 @@ public class JoinZoneHandler extends BaseServerEventHandler {
         user.setProperty("client_platform", clientPlatform);
         user.setProperty("client_subplatform", clientSubplatform);
         user.setProperty("client_os", clientOs);
-        user.setProperty("ip_address", session.getAddress());
+        user.setProperty("ip_address", actualIp);
         user.setProperty("client_lang", clientLang);
         
         if (clientPlatform.equals("ios")) {
@@ -146,7 +148,7 @@ public class JoinZoneHandler extends BaseServerEventHandler {
             File file = new File(Settings.ServerRoot + "/json_db/user_game_settings/"+i + ".json");
             SFSObject resp = Util.getSFSFromJson(file);
             
-            //send("game_settings", resp, user);
+            send("game_settings", resp, user);
         }
     	
 		send("gs_initialized", response, user);
