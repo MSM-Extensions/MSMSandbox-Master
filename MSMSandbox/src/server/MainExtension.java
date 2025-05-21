@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.core.SFSEventType;
+import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import server.ServerEventHandler.DisconnectHandler;
 import server.ServerEventHandler.JoinZoneHandler;
@@ -257,6 +258,8 @@ public class MainExtension extends SFSExtension {
         addRequestHandler("db_battle_monster_actions", GameStateHandler.class);
         addRequestHandler("db_battle_monster_stats", GameStateHandler.class);
         addRequestHandler("db_battle_music", GameStateHandler.class);
+        addRequestHandler("db_breeding", GameStateHandler.class);
+        addRequestHandler("db_polarity_amplifier_levels", GameStateHandler.class);
         addRequestHandler("battle_teleport", GameStateHandler.class);
         addRequestHandler("battle_start", GameStateHandler.class);
         addRequestHandler("battle_start_versus", GameStateHandler.class);
@@ -286,9 +289,28 @@ public class MainExtension extends SFSExtension {
         addRequestHandler("gs_speedup_synthesizing", GameStateHandler.class);
         addRequestHandler("gs_collect_synthesizing_failure", GameStateHandler.class);
         
-        trace("MSM Sandbox initialized");
+        JSONObject tokenRequestJson = new JSONObject();
+		
+		JSONObject tokenRequest = new JSONObject(Util.PostRequest("https://auth.bbbgame.net/auth/api/anon_account/?g=27", tokenRequestJson.toString()));
+		
+		trace(tokenRequest.toString());
         
-        MSMClient client = new MSMClient("zhkfwm43wn", "rxts83bj9hn8757cb23d", "anon", "4.5.0", "58ffe1b7-1620-4534-982a-9f71bdb476fe");
+        MSMClient client = new MSMClient(tokenRequest.getString("username"), tokenRequest.getString("password"), "anon", "4.6.2", "70ba5d5d-d903-4587-93d6-655c4814844f");
+        
+        SFSObject auth = client.auth();
+        
+        if (auth.getBool("ok")) {
+        	SFSObject pregameSetup = client.pregameSetup();
+        	if (pregameSetup.getBool("ok")) {
+        		trace("Server Ip: "+pregameSetup.getUtfString("ip"));
+        	} else {
+        		trace("Pregame Setup failed: "+pregameSetup.getUtfString("message"));
+        	}
+        } else {
+        	trace("Auth failed: "+auth.getUtfString("message"));
+        }
+        
+        trace("MSM Sandbox initialized");
     }
 
 }

@@ -178,7 +178,8 @@ public class Util {
     
     public static String PostRequest(String urlString, String requestBody, Map<String, String> headers) {
         try {
-            URL url = new URL(urlString);
+            @SuppressWarnings("deprecation")
+			URL url = new URL(urlString);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
@@ -226,6 +227,14 @@ public class Util {
 
 	public static String PostRequest(String urlString, String requestBody) {
 		return PostRequest(urlString, requestBody, new HashMap<>());
+	}
+	
+	public static String PostRequest(String urlString) {
+		return PostRequest(urlString, "", new HashMap<>());
+	}
+	
+	public static String PostRequest(String urlString, Map<String, String> headers) {
+		return PostRequest(urlString, "", headers);
 	}
 
 }

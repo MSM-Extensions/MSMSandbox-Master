@@ -6,6 +6,7 @@ package server.Tools;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.smartfoxserver.v2.entities.data.SFSObject;
@@ -26,39 +27,45 @@ public class MSMClient extends SmartFox {
 		this.login_type = login_type;
 		this.client_version = client_version;
 		this.access_key = access_key;
-		
-		JSONObject tokenRequestJson = new JSONObject();
-		tokenRequestJson.put("g", 27);
-		tokenRequestJson.put("u", this.username);
-		tokenRequestJson.put("p", this.password);
-		tokenRequestJson.put("t", this.login_type);
-		tokenRequestJson.put("client_version", this.client_version);
-		tokenRequestJson.put("access_key", this.access_key);
-		tokenRequestJson.put("platform", "pc");
-		
-		JSONObject tokenRequest = new JSONObject(Util.PostRequest("https://auth.bbbgame.net/auth/api/token/", tokenRequestJson.toString()));
+	}
+	
+	public SFSObject auth() {
+		SFSObject response = new SFSObject();
+		JSONObject tokenRequest = new JSONObject(Util.PostRequest("https://auth.bbbgame.net/auth/api/token/?g=27&u="+this.username+"&p="+this.password+"&t="+this.login_type));
 		
 		if (!tokenRequest.getBoolean("ok")) {
-			Util.ext.trace(tokenRequest.toString());
-			Util.ext.trace("MSMClient: "+tokenRequest.getString("message"));
-			return;
+			response.putBool("ok", false);
+			response.putUtfString("message", tokenRequest.getString("message"));
+			return response;
 		}
 		
 		this.access_token = tokenRequest.getString("access_token");
-		this.user_game_id = tokenRequest.getString("user_game_id");
-
+		JSONArray idArray = tokenRequest.getJSONArray("user_game_id");
+		this.user_game_id = idArray.getString(0);
+		response.putBool("ok", true);
+		return response;
+	}
+	
+	public SFSObject pregameSetup() {
+		SFSObject response = new SFSObject();
 		Map<String, String> pregameSetupHeaders = new HashMap<>();
 		pregameSetupHeaders.put("Authorization", this.access_token);
 		
-		JSONObject pregameSetupRequest = new JSONObject(Util.PostRequest("https://msmpc.bbbgame.net/pregame_setup.php/", tokenRequestJson.toString(), pregameSetupHeaders));
+		JSONObject pregameSetupRequest = new JSONObject(Util.PostRequest("https://msmpc.bbbgame.net/pregame_setup.php/?g=27&access_key="+this.access_key+"&client_version=4.8.2&platform=pc", pregameSetupHeaders));
 		
 		if (!pregameSetupRequest.getBoolean("ok")) {
-			Util.ext.trace("MSMClient: "+tokenRequest.getString("message"));
-			return;
+			response.putBool("ok", false);
+			response.putUtfString("message", pregameSetupRequest.getString("message"));
+			return response;
 		}
 		
-		this.server_ip = tokenRequest.getString("serverIp");
-		this.content_url = tokenRequest.getString("contentUrl");
+		this.server_ip = pregameSetupRequest.getString("serverIp");
+		this.content_url = pregameSetupRequest.getString("contentUrl");
+		
+		response.putBool("ok", true);
+		response.putUtfString("ip", this.server_ip);
+		
+		return response;
 	}
 	
 	public void connect() {
