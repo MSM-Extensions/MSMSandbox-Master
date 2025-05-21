@@ -17,6 +17,8 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
@@ -174,7 +176,7 @@ public class Util {
         return new String(decrypted, StandardCharsets.UTF_8);
     }
     
-	public static String PostRequest(String urlString, String requestBody) {
+    public static String PostRequest(String urlString, String requestBody, Map<String, String> headers) {
         try {
             URL url = new URL(urlString);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
@@ -183,6 +185,12 @@ public class Util {
 
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Accept-Encoding", "deflate, gzip");
+
+            if (headers != null) {
+                for (Map.Entry<String, String> entry : headers.entrySet()) {
+                    connection.setRequestProperty(entry.getKey(), entry.getValue());
+                }
+            }
 
             try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), StandardCharsets.UTF_8)) {
                 writer.write(requestBody);
@@ -199,6 +207,7 @@ public class Util {
                 }
             }
 
+            // Read response
             StringBuilder response = new StringBuilder();
             try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
                 String inputLine;
@@ -209,9 +218,14 @@ public class Util {
 
             JSONObject jsonResponse = new JSONObject(response.toString());
             return jsonResponse.toString();
-            
+
         } catch (IOException e) {
             throw new RuntimeException("Error occurred while connecting to server: " + e.getMessage(), e);
         }
     }
+
+	public static String PostRequest(String urlString, String requestBody) {
+		return PostRequest(urlString, requestBody, new HashMap<>());
+	}
+
 }
