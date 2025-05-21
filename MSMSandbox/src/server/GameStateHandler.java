@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import com.smartfoxserver.v2.annotations.MultiHandler;
 import com.smartfoxserver.v2.entities.User;
+import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
@@ -89,7 +90,6 @@ public class GameStateHandler extends BaseClientRequestHandler {
 		switch (cmd) {
 		// db
 		case "db_gene":
-		
 		    response.putSFSArray("genes_data", getSFSArrayQueryData("genes"));
 
 		    send(cmd, response, user);
@@ -130,7 +130,8 @@ public class GameStateHandler extends BaseClientRequestHandler {
 		    send(cmd, response, user);
 			break;
 		case "db_island_v2":
-			SFSObject islands = Util.getSFSFromJson(new File("D:\\Programs\\SmartFoxServer_2X\\SFS2X\\ServerData\\db_files\\island_v2\\db_island_v2_1.json"));
+			SFSObject islands = MainExtension.client.getChunkByCmdAndNum(cmd, 1);
+			//SFSObject islands = Util.getSFSFromJson(new File("D:\\Programs\\SmartFoxServer_2X\\SFS2X\\ServerData\\db_files\\island_v2\\db_island_v2_1.json"));
 			
 			response.putSFSArray("islands_data", islands.getSFSArray("islands_data"));
 		    send(cmd, response, user);
@@ -145,15 +146,27 @@ public class GameStateHandler extends BaseClientRequestHandler {
 		    send(cmd, response, user);
 		    break;
 		case "db_monster":
-			send(cmd, response, user);
+			for (int i = 1; i <= 8; i++) {
+				response.putSFSArray("monsters_data", MainExtension.client.getChunkByCmdAndNum(cmd, i).getSFSArray("monsters_data"));
+				trace(i);
+			    send(cmd, response, user);
+			}
 			//multiSend(cmd, getSFSArrayQueryData("monsters"), user, "monsters_data");
 			break;
 		case "db_structure":
-			send(cmd, response, user);
+			for (int i = 1; i <= 10; i++) {
+				response.putSFSArray("structures_data", MainExtension.client.getChunkByCmdAndNum(cmd, i).getSFSArray("structures_data"));
+				trace(i);
+			    send(cmd, response, user);
+			}
 			//multiSend(cmd, getSFSArrayQueryData("structures"), user, "structures_data");
 			break;
 		case "db_costumes":
-			multiSend(cmd, getSFSArrayQueryData("costumes"), user, "costume_data");
+			for (int i = 1; i <= 5; i++) {
+				response.putSFSArray("costume_data", MainExtension.client.getChunkByCmdAndNum(cmd, i).getSFSArray("costume_data"));
+				trace(i);
+			    send(cmd, response, user);
+			}
 	    	send(cmd, response, user);
 	    	break;
 		case "db_entity_alt_costs":

@@ -37,6 +37,9 @@ public class MainExtension extends SFSExtension {
     
     public static MSMClient client;
     
+    public static boolean can_play = false;
+    public static String cant_play_reason;
+    
     @Override
     public void init() {
         Long startTime = Util.getUnixTime();
@@ -290,14 +293,13 @@ public class MainExtension extends SFSExtension {
         addRequestHandler("gs_start_synthesizing", GameStateHandler.class);
         addRequestHandler("gs_speedup_synthesizing", GameStateHandler.class);
         addRequestHandler("gs_collect_synthesizing_failure", GameStateHandler.class);
-        
-        JSONObject tokenRequestJson = new JSONObject();
 		
-		JSONObject tokenRequest = new JSONObject(Util.PostRequest("https://auth.bbbgame.net/auth/api/anon_account/?g=27", tokenRequestJson.toString()));
+		//JSONObject tokenRequest = new JSONObject(Util.PostRequest("https://auth.bbbgame.net/auth/api/anon_account/?g=27", ""));
 		
-		trace(tokenRequest.toString());
+		can_play = false;
+		cant_play_reason = "Server reloading!";
         
-        client = new MSMClient(tokenRequest.getString("username"), tokenRequest.getString("password"), "anon", "4.8.2", "70ba5d5d-d903-4587-93d6-655c4814844f", true);
+        client = new MSMClient("yfjdv5psbwxz", "3774dj5c96tpb8h3tgjt", "anon", "4.8.2", "70ba5d5d-d903-4587-93d6-655c4814844f", true);
         
         SFSObject auth = client.auth();
         
@@ -313,6 +315,8 @@ public class MainExtension extends SFSExtension {
         } else {
         	trace("Auth failed: "+auth.getUtfString("message"));
         }
+        
+        can_play = true;
         
         trace("Cacheing complete! MSM Sandbox initialized");
     }

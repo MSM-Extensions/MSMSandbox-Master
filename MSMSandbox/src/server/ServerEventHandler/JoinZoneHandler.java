@@ -1,9 +1,6 @@
 package server.ServerEventHandler;
 
-import java.io.File;
 import java.util.Random;
-
-import org.json.JSONObject;
 
 import com.smartfoxserver.bitswarm.sessions.ISession;
 import com.smartfoxserver.v2.core.ISFSEvent;
@@ -17,7 +14,6 @@ import com.smartfoxserver.v2.extensions.BaseServerEventHandler;
 import server.MainExtension;
 import server.Settings;
 import server.Entities.Player;
-import server.Tools.Util;
 
 public class JoinZoneHandler extends BaseServerEventHandler {
 	
@@ -30,8 +26,14 @@ public class JoinZoneHandler extends BaseServerEventHandler {
 
 	@Override
 	public void handleServerEvent(ISFSEvent event) throws SFSException {
-		Settings.QUEUE++;
 		User user = (User) event.getParameter(SFSEventParam.USER);
+		
+		if (!MainExtension.can_play) {
+            SFSObject response = new SFSObject();
+            response.putUtfString("reason", MainExtension.cant_play_reason);
+            send("gs_player_banned", response, user);
+            return;
+		}
         ISession session = user.getSession();
         
         int user_count = getParentExtension().getParentZone().getUserCount();
@@ -57,6 +59,8 @@ public class JoinZoneHandler extends BaseServerEventHandler {
         	send("gs_player_banned", response, user);
         	return;
         }
+        
+		Settings.QUEUE++;
         
         user.setPrivilegeId((short) 3);
         
@@ -119,6 +123,7 @@ public class JoinZoneHandler extends BaseServerEventHandler {
         
         user.setProperty("player_object", player);
         user.setProperty("bbb_id", bbbId);
+        user.setProperty("user_game_id", userGameId);
         user.setProperty("client_version", actualClientVersion);
         user.setProperty("last_update_version", lastUpdateVersion);
         user.setProperty("client_device", clientDevice);

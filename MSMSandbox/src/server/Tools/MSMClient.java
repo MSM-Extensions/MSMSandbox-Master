@@ -121,12 +121,62 @@ public class MSMClient extends SmartFox {
 		if (this.download_requests) {
 			if (cmd.equals("gs_initialized")) {
 				sfs.send(new ExtensionRequest("db_genes", null));
+				sfs.send(new ExtensionRequest("db_monster", null));
+				sfs.send(new ExtensionRequest("db_structure", null));
+				sfs.send(new ExtensionRequest("db_island_v2", null));
+				sfs.send(new ExtensionRequest("db_costumes", null));
+				sfs.send(new ExtensionRequest("db_battle", null));
+				sfs.send(new ExtensionRequest("db_store_v2", null));
 			}
 			
 			if (cmd.equals("game_settings")) {
 				game_settings.addSFSObject(params);
 			}	
 		}
+	}
+	
+	public int getNumberOfChunksForCmd(String cmd) {
+	    for (int i = 0; i < downloads.size(); i++) {
+	        SFSObject obj = (SFSObject) downloads.getSFSObject(i);
+
+	        if (cmd.equals(obj.getUtfString("cmd"))) {
+	            SFSObject params = (SFSObject) obj.getSFSObject("params");
+	            
+	            if (params.containsKey("chunks")) {
+	                return params.getInt("chunks");
+	            } else {
+	                return 1;
+	            }
+	        }
+	    }
+	    
+	    return 0;
+	}
+	
+	public SFSObject getChunkByCmdAndNum(String cmd, int chunkNum) {
+	    for (int i = 0; i < downloads.size(); i++) {
+	        SFSObject obj = (SFSObject) downloads.getSFSObject(i);
+	        
+	        String storedCmd = obj.getUtfString("cmd");
+	        if (!storedCmd.equals(cmd)) {
+	            continue;
+	        }
+	        
+	        SFSObject params = (SFSObject) obj.getSFSObject("params");
+	        
+	        if (params.containsKey("chunk")) {
+	            int storedChunkNum = params.getInt("chunk");
+	            if (storedChunkNum == chunkNum) {
+	                return params;
+	            }
+	        } else {
+	            if (chunkNum == 0 || chunkNum == 1) {
+	                return params;
+	            }
+	        }
+	    }
+	    
+	    return null;
 	}
 	
 	public SFSObject getParamsByCmd(String searchCmd) {
