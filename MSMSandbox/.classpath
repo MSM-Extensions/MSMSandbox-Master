@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/Programs/SmartFoxServer_2X/SFS2X/lib/sfs2x.jar"/>
+	<classpathentry kind="lib" path="D:/Programs/SmartFoxServer_2X/SFS2X/lib/sfs2x-core.jar"/>
+	<classpathentry kind="lib" path="D:/Programs/SmartFoxServer_2X/SFS2X/extensions/__lib__/gson-2.10.1.jar"/>
+	<classpathentry kind="lib" path="D:/Programs/SmartFoxServer_2X/SFS2X/extensions/__lib__/gson-2.10.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/Programs/SmartFoxServer_2X/SFS2X/extensions/__lib__/jdom.jar"/>
+	<classpathentry kind="lib" path="D:/Downloads/ojdbc17.jar"/>
+	<classpathentry kind="lib" path="D:/Downloads/sqlite-jdbc-3.49.1.0.jar"/>
+	<classpathentry kind="lib" path="D:/Downloads/json-20250107.jar"/>
+	<classpathentry kind="lib" path="D:/Programs/SmartFoxServer_2X/SFS2X/extensions/__lib__/json-simple-1.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
