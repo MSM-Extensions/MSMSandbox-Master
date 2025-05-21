@@ -14,6 +14,7 @@ import com.smartfoxserver.v2.extensions.BaseClientRequestHandler;
 
 import server.Entities.Player;
 import server.Entities.SFSObjects;
+import server.Tools.Util;
 
 @MultiHandler
 public class GameStateHandler extends BaseClientRequestHandler {
@@ -56,7 +57,7 @@ public class GameStateHandler extends BaseClientRequestHandler {
 	    JSONObject requestJson = new JSONObject();
 	    requestJson.put("db_name", db_name);
 
-	    String JSON = MainExtension.PostRequest(MainExtension.DBUrl + "/query/static_db_json/", requestJson.toString());
+	    String JSON = Util.PostRequest(MainExtension.DBUrl + "/query/static_db_json/", requestJson.toString());
 	    JSONObject json = new JSONObject(JSON);
 	    
 	    JSONArray dataArray = json.getJSONArray("data");

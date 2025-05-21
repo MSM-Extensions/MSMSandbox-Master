@@ -4,7 +4,7 @@ import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import server.Settings;
-import server.Util;
+import server.Tools.Util;
 
 public class Player {
 	public String client_platform = "pc";

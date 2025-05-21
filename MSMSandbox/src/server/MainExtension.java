@@ -23,6 +23,7 @@ import com.smartfoxserver.v2.core.SFSEventType;
 import server.ServerEventHandler.DisconnectHandler;
 import server.ServerEventHandler.JoinZoneHandler;
 import server.ServerEventHandler.LoginHandler;
+import server.Tools.Util;
 
 public class MainExtension extends SFSExtension {
     public static String encryptionVector = Settings.get("encryption_vector");
@@ -52,7 +53,7 @@ public class MainExtension extends SFSExtension {
         }
         */
         
-        JSONObject DBUrlRequest = new JSONObject(PostRequest("https://riotlove.pythonanywhere.com/db_server/", ""));
+        JSONObject DBUrlRequest = new JSONObject(Util.PostRequest("https://riotlove.pythonanywhere.com/db_server/", ""));
         
         DBUrl = (String) DBUrlRequest.get("url");
         
@@ -285,47 +286,6 @@ public class MainExtension extends SFSExtension {
         addRequestHandler("gs_collect_synthesizing_failure", GameStateHandler.class);
         
         trace("MSM Sandbox initialized");
-    }
-    
-    public static String PostRequest(String urlString, String requestBody) {
-        try {
-            URL url = new URL(urlString);
-            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setDoOutput(true);
-
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Accept-Encoding", "deflate, gzip");
-
-            try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), StandardCharsets.UTF_8)) {
-                writer.write(requestBody);
-                writer.flush();
-            }
-
-            InputStream inputStream = connection.getInputStream();
-            String encoding = connection.getContentEncoding();
-            if (encoding != null) {
-                if (encoding.equalsIgnoreCase("gzip")) {
-                    inputStream = new GZIPInputStream(inputStream);
-                } else if (encoding.equalsIgnoreCase("deflate")) {
-                    inputStream = new InflaterInputStream(inputStream);
-                }
-            }
-
-            StringBuilder response = new StringBuilder();
-            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-                String inputLine;
-                while ((inputLine = bufferedReader.readLine()) != null) {
-                    response.append(inputLine);
-                }
-            }
-
-            JSONObject jsonResponse = new JSONObject(response.toString());
-            return jsonResponse.toString();
-            
-        } catch (IOException e) {
-            throw new RuntimeException("Error occurred while connecting to server: " + e.getMessage(), e);
-        }
     }
 
 }

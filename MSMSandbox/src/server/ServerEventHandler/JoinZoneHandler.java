@@ -16,8 +16,8 @@ import com.smartfoxserver.v2.extensions.BaseServerEventHandler;
 
 import server.MainExtension;
 import server.Settings;
-import server.Util;
 import server.Entities.Player;
+import server.Tools.Util;
 
 public class JoinZoneHandler extends BaseServerEventHandler {
 	
@@ -82,7 +82,7 @@ public class JoinZoneHandler extends BaseServerEventHandler {
         JSONObject requestJson = new JSONObject();
         requestJson.put("user_game_id", userGameId);
         
-        String JSON = MainExtension.PostRequest(MainExtension.DBUrl + "/query/user_game_id_to_bbb_id/", requestJson.toString());
+        String JSON = Util.PostRequest(MainExtension.DBUrl + "/query/user_game_id_to_bbb_id/", requestJson.toString());
         trace(JSON);
         JSONObject userGameIdToBBBIDJson = new JSONObject(JSON);
         
@@ -103,7 +103,7 @@ public class JoinZoneHandler extends BaseServerEventHandler {
         
         if (isNew) {
         	player = new Player(bbbId, "New Player");
-        	MainExtension.PostRequest(MainExtension.DBUrl + "/query/user_nolonger_new/", requestJson.toString());
+        	Util.PostRequest(MainExtension.DBUrl + "/query/user_nolonger_new/", requestJson.toString());
         	
         	JSONObject newPlayerJson = new JSONObject();
         	newPlayerJson.put("bbb_id", bbbId);

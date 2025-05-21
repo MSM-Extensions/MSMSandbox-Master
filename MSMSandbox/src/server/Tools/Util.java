@@ -1,4 +1,4 @@
-package server;
+package server.Tools;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,14 +9,23 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Base64;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.InflaterInputStream;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.net.ssl.HttpsURLConnection;
+
+import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,6 +35,8 @@ import com.google.gson.JsonSyntaxException;
 import com.smartfoxserver.v2.SmartFoxServer;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.extensions.SFSExtension;
+
+import server.MainExtension;
 
 public class Util {
     
@@ -161,5 +172,46 @@ public class Util {
         byte[] decrypted = cipher.doFinal(decodedEncryptedMessage);
         
         return new String(decrypted, StandardCharsets.UTF_8);
+    }
+    
+	public static String PostRequest(String urlString, String requestBody) {
+        try {
+            URL url = new URL(urlString);
+            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Accept-Encoding", "deflate, gzip");
+
+            try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), StandardCharsets.UTF_8)) {
+                writer.write(requestBody);
+                writer.flush();
+            }
+
+            InputStream inputStream = connection.getInputStream();
+            String encoding = connection.getContentEncoding();
+            if (encoding != null) {
+                if (encoding.equalsIgnoreCase("gzip")) {
+                    inputStream = new GZIPInputStream(inputStream);
+                } else if (encoding.equalsIgnoreCase("deflate")) {
+                    inputStream = new InflaterInputStream(inputStream);
+                }
+            }
+
+            StringBuilder response = new StringBuilder();
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+                String inputLine;
+                while ((inputLine = bufferedReader.readLine()) != null) {
+                    response.append(inputLine);
+                }
+            }
+
+            JSONObject jsonResponse = new JSONObject(response.toString());
+            return jsonResponse.toString();
+            
+        } catch (IOException e) {
+            throw new RuntimeException("Error occurred while connecting to server: " + e.getMessage(), e);
+        }
     }
 }

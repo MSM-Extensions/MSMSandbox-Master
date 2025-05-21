@@ -2,7 +2,7 @@ package server.Entities;
 
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
-import server.Util;
+import server.Tools.Util;
 
 public class SFSObjects {
 	public static final SFSObject properties = new SFSObject();

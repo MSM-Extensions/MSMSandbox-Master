@@ -14,7 +14,7 @@ import com.smartfoxserver.v2.extensions.BaseServerEventHandler;
 
 import server.Logger;
 import server.MainExtension;
-import server.Util;
+import server.Tools.Util;
 
 public class LoginHandler extends BaseServerEventHandler {
 	
