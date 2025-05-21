@@ -60,7 +60,7 @@ public class MSMClient extends SmartFox {
 		this.content_url = tokenRequest.getString("contentUrl");
 	}
 	
-	private void Update() {
+	private void Connect() {
         ConfigData config = new ConfigData();
         config.setHost(this.server_ip);
         config.setPort(9933);
@@ -86,11 +86,11 @@ public class MSMClient extends SmartFox {
 		
 	}
 	
-	private void download(String cmd) {
+	public void download(String cmd) {
 		this.download(cmd, new SFSObject());
 	}
 	
-	private void download(String cmd, SFSObject params) {
-		
+	public void download(String cmd, SFSObject params) {
+		this.send(new ExtensionRequest(cmd, params));
 	}
 }
