@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -20,15 +21,22 @@ import javax.net.ssl.HttpsURLConnection;
 
 import org.json.JSONObject;
 
+import com.smartfoxserver.v2.api.ISFSApi;
 import com.smartfoxserver.v2.core.SFSEvent;
+import com.smartfoxserver.v2.core.SFSEventParam;
 import com.smartfoxserver.v2.core.SFSEventType;
+import com.smartfoxserver.v2.entities.User;
+import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
+import server.Entities.Player;
 import server.ServerEventHandler.DisconnectHandler;
 import server.ServerEventHandler.JoinZoneHandler;
 import server.ServerEventHandler.LoginHandler;
 import server.Tools.MSMClient;
+import server.Tools.SQLHandler;
 import server.Tools.Util;
+import sfs2x.client.SmartFox;
 
 public class MainExtension extends SFSExtension {
     public static String encryptionVector = Settings.get("encryption_vector");
@@ -36,62 +44,65 @@ public class MainExtension extends SFSExtension {
     
     public static int sessionsSinceStart;
     
-    //public static SFSDBManager dbm;
-    
-    public static String DBUrl;
-    
     public static MSMClient client;
+    public static SQLHandler sqlHandler;
     
     public static boolean can_play = false;
-    public static String cant_play_reason;
+    public static String cant_play_reason = "Server reloading!";
+    
+    public static boolean isLinux = System.getProperty("os.name").toLowerCase().contains("linux");
+    
+    public static long startTime = 0;
+    
+    public static SFSObject gameSettings = new SFSObject();
+    
+	public static final Object eggLock = new Object();
+	
+	public static final SFSObject allowedVersions = new SFSObject();
+	
+	public static SFSArray timedEventsCache = new SFSArray();
 
     public void cacheDbs() {
-		can_play = false;
-		cant_play_reason = "Server reloading!";
-        
-        client = new MSMClient("yfjdv5psbwxz", "3774dj5c96tpb8h3tgjt", "anon", "4.8.2", "70ba5d5d-d903-4587-93d6-655c4814844f", true);
-        
-        SFSObject auth = client.auth();
-        
-        this.trace("Cacheing dbs");
-        
-        if (auth.getBool("ok")) {
-        	SFSObject pregameSetup = client.pregameSetup();
-        	if (pregameSetup.getBool("ok")) {
-        		client.connectToServer();
-        	} else {
-        		trace("Pregame Setup failed: "+pregameSetup.getUtfString("message"));
-        	}
-        } else {
-        	trace("Auth failed: "+auth.getUtfString("message"));
+        can_play = false;
+        cant_play_reason = "Server reloading!";
+
+        client = new MSMClient("g92gtktd9wcj", "mj28v95q7xmvb4r5tkf8", "anon", "4.8.4", allowedVersions.getUtfString("4.8.4"), true);
+
+        try {
+            SFSObject auth = client.auth();
+            trace("Auth response: " + auth.toJson());
+
+            if (auth.getBool("ok")) {
+                SFSObject pregameSetup = client.pregameSetup();
+                trace("Pregame Setup response: " + pregameSetup.toJson());
+
+                if (!pregameSetup.getBool("ok")) {
+                	client.server_ip = "3.142.208.146";
+                }
+                
+                client.connectToServer();
+            } else {
+                trace("Auth failed: " + auth.getUtfString("message"));
+            }
+        } catch (Exception e) {
+            trace("Error in cacheDbs: " + e.toString());
         }
-        
+
         can_play = true;
     }
     
     @Override
     public void init() {
-        Long startTime = Util.getUnixTime();
-        /*
-         try {
-            String testString = Settings.get("encryption_test_string", true, "n");
-            String encrypted = Util.encrypt(testString, encryptionVector, encryptionVector);
-            
-            String decrypted = Util.decrypt(encrypted, encryptionVector, encryptionVector);
-            
-            trace(encrypted+"\n"+decrypted);
-            
-            if (!decrypted.equals(testString)) {
-                throw new Exception("Decrypted string is not equal to test string!");
-            }
-         } catch (Exception e) {
-            trace("Something bad happened while testing encryption: "+e.toString());
-        }
-        */
+    	Settings.setExtension(this);
+    	Settings.logServerRoot();
+    	
+        startTime = Util.getUnixTime();
         
-        JSONObject DBUrlRequest = new JSONObject(Util.PostRequest("https://riotlove.pythonanywhere.com/db_server/", ""));
+        allowedVersions.putUtfString("4.6.1", "193f6d49-4051-4adc-9949-fa4f4e9fd43a");
+        allowedVersions.putUtfString("4.8.2", "70ba5d5d-d903-4587-93d6-655c4814844f");
+        allowedVersions.putUtfString("4.8.4", "33cdd406-b5e0-4ebf-8891-2c28b84af2ea");
         
-        DBUrl = (String) DBUrlRequest.get("url");
+        sqlHandler = new SQLHandler("Yj!L6P!r8bD38pW");
         
         addEventHandler(SFSEventType.USER_LOGIN, LoginHandler.class);
         addEventHandler(SFSEventType.USER_JOIN_ZONE, JoinZoneHandler.class);
@@ -102,6 +113,7 @@ public class MainExtension extends SFSExtension {
         addRequestHandler("db_entity_alt_costs", GameStateHandler.class);
         addRequestHandler("db_versions", GameStateHandler.class);
         addRequestHandler("db_gene", GameStateHandler.class);
+        addRequestHandler("db_bakery_foods", GameStateHandler.class);
         addRequestHandler("db_bakery_foods", GameStateHandler.class);
         addRequestHandler("db_titansoul_levels", GameStateHandler.class);
         addRequestHandler("db_nucleus", GameStateHandler.class);
@@ -126,6 +138,7 @@ public class MainExtension extends SFSExtension {
         addRequestHandler("gs_monster_island_2_island_data", GameStateHandler.class);
         addRequestHandler("gs_flip_levels", GameStateHandler.class);
         addRequestHandler("gs_flip_boards", GameStateHandler.class);
+        addRequestHandler("gs_process_unclaimed_codes", GameStateHandler.class);
         addRequestHandler("test_types", GameStateHandler.class);
         addRequestHandler("gs_dipster_data", GameStateHandler.class);
         addRequestHandler("gs_entity_alt_cost_data", GameStateHandler.class);
@@ -327,7 +340,17 @@ public class MainExtension extends SFSExtension {
         
         cacheDbs();
         
-        trace("Cacheing complete! MSM Sandbox initialized");
+        trace("MSM Sandbox initialized");
     }
+    
+    @Override
+    public void destroy() {
+        trace("Saving logged in user data..");
 
+        for (User user : getParentZone().getUserList()) {
+            getApi().disconnectUser(user);
+        }
+
+        trace("All users saved and kicked.");
+    }
 }

@@ -16,6 +16,9 @@ import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,10 +38,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.smartfoxserver.v2.SmartFoxServer;
+import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.extensions.SFSExtension;
 
 import server.MainExtension;
+import server.Settings;
 
 public class Util {
     
@@ -217,8 +222,14 @@ public class Util {
                 }
             }
 
-            JSONObject jsonResponse = new JSONObject(response.toString());
-            return jsonResponse.toString();
+            String responseStr = response.toString().trim();
+            if (responseStr.isEmpty()) {
+                return "{}";
+            } else {
+                JSONObject jsonResponse = new JSONObject(responseStr);
+                return jsonResponse.toString();
+            }
+
 
         } catch (IOException e) {
             throw new RuntimeException("Error occurred while connecting to server: " + e.getMessage(), e);
@@ -236,5 +247,86 @@ public class Util {
 	public static String PostRequest(String urlString, Map<String, String> headers) {
 		return PostRequest(urlString, "", headers);
 	}
+	
+    public static String convertBidToFriendCode(String bbbIdInput) {
+        if (bbbIdInput == null || !bbbIdInput.matches("\\d+")) {
+            return "invalid BBB ID.";
+        }
 
+        long bid = Long.parseLong(bbbIdInput);
+
+        int ohoValue = (int) ((Math.floorDiv(bid * 11, 14) % 14) + 61);
+        int hohValue = (int) (((bid * 11) % 14) + 61);
+
+        char yoy = intToChar(hohValue);
+        char yay = intToChar(ohoValue);
+
+        return bid + String.valueOf(yay) + yoy;
+    }
+
+    public static char intToChar(int value) {
+        return (char) value;
+    }
+    
+    public static String ipToCountry(String ip) {
+        try {
+            String json = PostRequest(ip);
+            JSONObject obj = new JSONObject(json);
+            return obj.getString("country");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Unknown";
+        }
+    }
+    
+    public static boolean isIslandBroken(int islandId) {
+        for (int num : Settings.brokenIslands) {
+            if (num == islandId) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public static String formatUnixTime(long unixTime) {
+        LocalDateTime dateTime = Instant.ofEpochSecond(unixTime)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+
+        int day = dateTime.getDayOfMonth();
+        String suffix = getDaySuffix(day);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d',' yyyy 'at' h:mm:ss a");
+        String formatted = dateTime.format(formatter);
+
+        return formatted.replaceFirst(String.valueOf(day), day + suffix);
+    }
+
+    private static String getDaySuffix(int day) {
+        if (day >= 11 && day <= 13) {
+            return "th";
+        }
+        int lastDigit = day % 10;
+        if (lastDigit == 1) {
+            return "st";
+        } else if (lastDigit == 2) {
+            return "nd";
+        } else if (lastDigit == 3) {
+            return "rd";
+        } else {
+            return "th";
+        }
+    }
+    
+    public static SFSObject cloneSFSObject(SFSObject original) {
+        if (original == null) return null;
+        byte[] binaryData = original.toBinary();
+        return SFSObject.newFromBinaryData(binaryData);
+    }
+
+    public static SFSArray cloneSFSArray(SFSArray original) {
+        if (original == null) return null;
+        byte[] binaryData = original.toBinary();
+        return SFSArray.newFromBinaryData(binaryData);
+    }
 }
