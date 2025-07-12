@@ -102,7 +102,7 @@ public class MainExtension extends SFSExtension {
         allowedVersions.putUtfString("4.8.2", "70ba5d5d-d903-4587-93d6-655c4814844f");
         allowedVersions.putUtfString("4.8.4", "33cdd406-b5e0-4ebf-8891-2c28b84af2ea");
         
-        sqlHandler = new SQLHandler("Yj!L6P!r8bD38pW");
+        sqlHandler = new SQLHandler("no");
         
         addEventHandler(SFSEventType.USER_LOGIN, LoginHandler.class);
         addEventHandler(SFSEventType.USER_JOIN_ZONE, JoinZoneHandler.class);
