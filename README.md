@@ -1,8 +1,27 @@
 # MSMSandbox-Master
+##### This readme was made with the assistance of generative AI. The code was not.
 
-This repository contains the FULL code for a project I worked on in January-July 2025, MSM Sandbox.
+This repository contains the **full code** for MSM Sandbox, a private server project I developed between January and July 2025.
 
 ## What is MSM Sandbox?
-If you're new here and don't know what MSM Sandbox is, it was a My Singing Monsters (2012 mobile game) private server I created originally in mid-2024 using... um... SOME stolen code... and was the first private server for the PC version of the game.
+MSM Sandbox is a private server project of My Singing Monsters. It was first created in mid-2024 and became the first private server for the PC version of the game.
 
-During January 2025, I began to re-code MSM Sandbox entirely.
+In January 2025, I began fully re-coding MSM Sandbox to improve stability, add new features, and make it easier to expand in the future.
+
+The rewrite introduces new systems that make the project much more organized and stable, which includes:
+
+* Custom classes for handling players, islands, monsters, and structures.
+* Database support (hosted on PythonAnywhere) for storing player data and game state.
+* Cleaner architecture and easier-to-expand codebase compared to the original 2024 build.
+
+However, in July 2025, My Singing Monsters updated its client to connect through an HTTP server using WebSockets. Since the MSM Sandbox recode was written in Java, and no reliable WebSocket modules were available for this setup, the server could no longer function. This forced the shutdown of MSM Sandbox, bringing an end to the project and leaving behind a community of players who had been enjoying it.
+
+## Contributing
+
+MSM Sandbox was originally shut down in July 2025 due to My Singing Monsters switching to an HTTP + WebSocket client connection. The current codebase is built on SmartFoxServer2X (Java), which has no reliable WebSocket support out of the box.
+
+If you'd like to contribute, here are a few areas that would greatly help the project:
+
+* Implementing or integrating WebSocket support into the SmartFoxServer2X backend. [ ]
+* Fixing bugs or stability issues in the custom classes. [ ]
+* Improving database security and reliability, currently the server communicates with a remote database via HTTP requests (for example, {'password': 'db-password', 'command': 'command'}) and is vulnerable to SQL injection. [ ]
