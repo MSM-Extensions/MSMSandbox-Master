@@ -22,6 +22,6 @@ MSM Sandbox was originally shut down in July 2025 due to My Singing Monsters swi
 
 If you'd like to contribute, here are a few areas that would greatly help the project:
 
-- [ ] Implementing or integrating WebSocket support into the SmartFoxServer2X backend.
+- [ ] Implementing or integrating WebSocket support into the SmartFoxServer2X backend, fixing the shutdown issue entirely.
 - [ ] Fixing bugs or stability issues in the custom classes.
 - [ ] Improving database security and reliability, currently the server communicates with a remote database via HTTP requests (for example, {'password': 'db-password', 'command': 'command'}) and is vulnerable to SQL injection.
