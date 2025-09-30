@@ -53,6 +53,8 @@ The server automatically sets paths depending on the OS. On Linux, ServerRoot po
 
 MSM Sandbox was originally shut down in July 2025 due to My Singing Monsters switching to an HTTP + WebSocket client connection. The current codebase is built on SmartFoxServer2X (Java), which has no reliable WebSocket support out of the box.
 
+I personally use Eclipse Java IDE for editing.
+
 If you'd like to contribute, here are a few areas that would greatly help the project:
 
 - [ ] Implementing or integrating WebSocket support into the SmartFoxServer2X backend, fixing the shutdown issue entirely.
