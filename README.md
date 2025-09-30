@@ -1,7 +1,10 @@
 # MSMSandbox-Master
 ##### This readme was made with the assistance of generative AI. The code was not.
 
-This repository contains the **full code** for MSM Sandbox, a private server project I developed between January and July 2025.
+This repository contains the **full code** for the MSM Sandbox, a private server project I developed between January and July 2025.
+
+> [!NOTE]
+> This is the code specifically for the sfs2x server. The pregame setup and auth server code is not included in this repository.
 
 ## What is MSM Sandbox?
 MSM Sandbox is a private server project of My Singing Monsters. It was first created in mid-2024 and became the first private server for the PC version of the game.
@@ -15,6 +18,35 @@ The rewrite introduces new systems that make the project much more organized and
 * Cleaner architecture and easier-to-expand codebase compared to the original 2024 build.
 
 However, in July 2025, My Singing Monsters updated its client to connect through an HTTP server using WebSockets. Since the MSM Sandbox recode was written in Java, and no reliable WebSocket modules were available for this setup, the server could no longer function. This forced the shutdown of MSM Sandbox, bringing an end to the project and leaving behind a community of players who had been enjoying it.
+
+## Run locally
+
+Requirements:
+
+* Java 8 or higher
+* SmartFoxServer2X installed and running
+
+Steps to run the server:
+
+1. Clone this repository to your local machine.
+2. Configure SmartFoxServer2X to point to the project directory.
+
+3. Set up the database connection:
+
+By default, the server communicates with a remote PythonAnywhere database.
+
+For local testing, you can configure the server to connect to a local database instance.
+
+> [!IMPORTANT]
+
+> The current HTTP-based database interface is vulnerable to SQL injection with Monster names and player display names.
+
+4. Start SmartFoxServer2X and run the MSM Sandbox server code.
+
+Notes for contributors:
+
+* Focus on adding WebSocket support or fixing bugs in the class structure first.
+* Pull requests and bug reports are welcome, but make sure to test changes locally before submitting.
 
 ## Contributing
 
