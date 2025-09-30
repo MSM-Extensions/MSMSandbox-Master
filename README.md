@@ -47,6 +47,8 @@ Notes for contributors:
 * Focus on adding WebSocket support or fixing bugs first.
 * Pull requests and bug reports are welcome, but make sure to test changes locally before submitting.
 
+The server automatically sets paths depending on the OS. On Linux, ServerRoot points to `/home/ubuntu/MSMSandbox/ServerData`; on Windows, it defaults to `D:\MSMSandbox\ServerData`. The JSON database is located at ServerRoot + "/json_db/Settings.json". Make sure these directories exist when running locally. Our Settings.json is available inside the repository.
+
 ## Contributing
 
 MSM Sandbox was originally shut down in July 2025 due to My Singing Monsters switching to an HTTP + WebSocket client connection. The current codebase is built on SmartFoxServer2X (Java), which has no reliable WebSocket support out of the box.
