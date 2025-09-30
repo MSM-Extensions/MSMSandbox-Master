@@ -1,0 +1,8 @@
+{
+    "zone": "MySingingMonsters",
+    "encryption_vector": "zq3zn4dx2h3k4im6",
+    "encryption_secret_key": "y26ju5h9r28eh3h2",
+    "encryption_test_string": "Hello, World!",
+    "min_client_version": "4.5.0",
+    "last_client_version": "4.7.0"
+}
