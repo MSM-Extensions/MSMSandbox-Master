@@ -47,7 +47,7 @@ Notes for contributors:
 * Focus on adding WebSocket support or fixing bugs first.
 * Pull requests and bug reports are welcome, but make sure to test changes locally before submitting.
 
-The server automatically sets paths depending on the OS. On Linux, ServerRoot points to `/home/ubuntu/MSMSandbox/ServerData`; on Windows, it defaults to `D:\MSMSandbox\ServerData`. The JSON database is located at ServerRoot + "/json_db/Settings.json". Make sure these directories exist when running locally. Our Settings.json is available inside the repository.
+The server automatically sets paths depending on the OS. On Linux, ServerRoot points to `/home/ubuntu/MSMSandbox/ServerData`; on Windows, it defaults to `D:\MSMSandbox\ServerData`. The JSON database is located at `ServerRoot + "/json_db/Settings.json"`. Make sure these directories exist when running locally. Our Settings.json is available inside the repository.
 
 ## Contributing
 
@@ -57,4 +57,7 @@ If you'd like to contribute, here are a few areas that would greatly help the pr
 
 - [ ] Implementing or integrating WebSocket support into the SmartFoxServer2X backend, fixing the shutdown issue entirely.
 - [ ] Fixing bugs or stability issues in the custom classes.
-- [ ] Improving database security and reliability, currently the server communicates with a remote database via HTTP requests (for example, {'password': 'db-password', 'command': 'command'}) and is vulnerable to SQL injection.
+- [ ] Improving database security and reliability, currently the server communicates with a remote database via HTTP requests (structured like: {'password': 'db-password', 'command': 'command'}) and is vulnerable to SQL injection.
+
+### Notes
+If you would like to reverse engineer the player data structure, there is these json files: `default_player_data.json`, `default_player_data_from_server.json` and `default_player_data_types.json`. Special thanks to @Zewsic for `default_player_data.json` and `default_player_data_types.json`.
