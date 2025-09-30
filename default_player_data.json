@@ -1,0 +1,175 @@
+{
+  "player_object": {
+    "active_island": -1,
+    "avatar": {
+      "pp_info": "0",
+      "pp_type": 0,
+      "user_id": null
+    },
+    "battle_level": 1,
+    "battle_loadout": {
+      "slot2": 0,
+      "slot1": 0,
+      "slot0": 0
+    },
+    "battle_loadout_versus": {
+      "slot2": 0,
+      "slot1": 0,
+      "slot0": 0
+    },
+    "battle_max_training_level": 10,
+    "battle_medals": 0,
+    "battle_xp": 0,
+    "pvp_season0": {
+      "schedule_started_on": 0,
+      "campaign_id": 0
+    },
+    "pvp_season1": {
+      "schedule_started_on": 0,
+      "campaign_id": 0
+    },
+    "prev_rank": 0,
+    "prev_tier": -1,
+    "is_admin": false,
+    "player_groups": [
+      40,
+      45,
+      51
+    ],
+    "premium": true,
+    "display_name": "New Player",
+    "friend_gift": 0,
+    "country": "UK",
+    "client_platform": "pc",
+    "client_tutorial_setup": "breedingAddOnBridged",
+    "currency_scratch_time": 0,
+    "cached_reward_day": 1,
+    "daily_bonus_amount": 0,
+    "daily_bonus_type": "none",
+    "reward_day": 1,
+    "rewards_total": 0,
+    "next_daily_login": 0,
+    "daily_cumulative_login_calendar_id": 1,
+    "daily_cumulative_login_next_collect": 0,
+    "daily_cumulative_login_reward_idx": 0,
+    "daily_cumulative_login_total": 0,
+    "daily_relic_purchase_count": 0,
+    "diamonds": 1999999999,
+    "coins": 1999999999,
+    "diamonds_spent": 0,
+    "egg_wildcards": 999999999,
+    "keys": 999999999,
+    "food": 1999999999,
+    "level": 100,
+    "relics": 999999999,
+    "xp": 0,
+    "starpower": 999999999,
+    "ethereal_currency": 999999999,
+    "total_starpower_collected": 0,
+    "has_promo": false,
+    "has_free_ad_scratch": false,
+    "has_scratch_off_m": false,
+    "has_scratch_off_s": false,
+    "flip_game_time": -1,
+    "monster_scratch_time": 0,
+    "next_relic_reset": 0,
+    "extra_ad_params": "",
+    "email_invite_reward": 0,
+    "fb_invite_reward": 0,
+    "twitter_invite_reward": 0,
+    "third_party_ads": false,
+    "third_party_video_ads": false,
+    "last_fb_post_reward": 0,
+    "new_mail": false,
+    "relic_diamond_cost": 1,
+    "speed_up_credit": 8,
+    "last_collect_all": 0,
+    "last_relic_purchase": 0,
+    "show_welcomeback": false,
+    "referral": 0,
+    "purchases_amount": 0,
+    "purchases_total": 0,
+    "last_login": 0,
+    "last_client_version": "0.0.0",
+    "date_created": 0,
+    "bbb_id": null,
+    "user": null,
+    "user_id": null,
+    "coins_actual": 1999999999,
+    "diamonds_actual": 1999999999,
+    "food_actual": 1999999999,
+    "keys_actual": 999999999,
+    "ethereal_currency_actual": 999999999,
+    "starpower_actual": 999999999,
+    "relics_actual": 999999999,
+    "egg_wildcards_actual": 999999999,
+    "battle": {
+      "level": 1,
+      "xp": 0,
+      "max_training_level": 10,
+      "medals": 0,
+      "user_id": null,
+      "loadout": "{\"slot2\": 0, \"slot1\": 0, \"slot0\": 0}",
+      "loadout_versus": "{\"slot2\": 0, \"slot1\": 0, \"slot0\": 0}"
+    },
+    "costumes": {
+      "items": [],
+      "unlocked": []
+    },
+    "daily_cumulative_login": {
+      "calendar_id": 1,
+      "reward_idx": 0,
+      "total": 0
+    },
+    "pvpSeason0": {
+      "campaign_id": 0,
+      "schedule_started_on": 0
+    },
+    "pvpSeason1": {
+      "campaign_id": 0,
+      "schedule_started_on": 0
+    },
+    "achievements": [],
+    "active_island_themes": [],
+    "islands": [
+      {
+        "last_baked": [],
+        "costumes_owned": "\"[]\"",
+        "likes": 0,
+        "dislikes": 0,
+        "last_player_level": 0,
+        "light_torch_flag": false,
+        "warp_speed": 1.0,
+        "monsters_sold": "[]",
+        "date_created": 1743211934736,
+        "user": null,
+        "island": 1,
+        "type": 0,
+        "num_torches": 0,
+        "baking": [],
+        "breeding": [],
+        "costume_data": {
+          "costumes": []
+        },
+        "fuzer": [],
+        "monsters": [],
+        "torches": [],
+        "tiles": [],
+        "structures": [],
+        "eggs": []
+      }
+    ],
+    "tracks": [],
+    "songs": [],
+    "mailbox": [],
+    "inventory": {
+      "items": []
+    },
+    "monsterScratchTime": 0,
+    "nextDailyLogin": 0,
+    "owned_island_themes": [],
+    "scaled_daily_reward": [],
+    "timed_events": [],
+    "unlocks": {}
+  }
+}
