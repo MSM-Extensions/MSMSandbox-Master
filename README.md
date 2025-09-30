@@ -38,14 +38,13 @@ By default, the server communicates with a remote PythonAnywhere database.
 For local testing, you can configure the server to connect to a local database instance.
 
 > [!IMPORTANT]
-
 > The current HTTP-based database interface is vulnerable to SQL injection with Monster names and player display names.
 
 4. Start SmartFoxServer2X and run the MSM Sandbox server code.
 
 Notes for contributors:
 
-* Focus on adding WebSocket support or fixing bugs in the class structure first.
+* Focus on adding WebSocket support or fixing bugs first.
 * Pull requests and bug reports are welcome, but make sure to test changes locally before submitting.
 
 ## Contributing
