@@ -255,6 +255,7 @@ public class GameStateHandler extends BaseClientRequestHandler {
 	    globalBattleRankings.putSFSArray("rankTable1", new SFSArray());
 
 	    friendsResponse.putSFSObject("global_battle_rankings", globalBattleRankings);
+		
 	    friendsResponse.putBool("success", true);
 	    friendsResponse.putSFSArray("requests", new SFSArray());
 	    friendsResponse.putSFSArray("tribes", new SFSArray());
